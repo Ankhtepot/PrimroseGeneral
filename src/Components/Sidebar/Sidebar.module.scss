@@ -1,11 +1,20 @@
 ﻿.container {
   width: 20%;
   height: 100%;
-  //background-color: red;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 0.3em;
+  position: relative;
+  //background-color: rgba(255, 255, 255, 0.1); // Semi-transparent background
+  backdrop-filter: blur(5px); // Blurs what is behind the element
+  -webkit-backdrop-filter: blur(5px); // For Safari support
+
+  h2 {
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    text-align: center;
+  }
 }

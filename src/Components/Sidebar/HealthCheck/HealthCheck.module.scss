@@ -1,0 +1,25 @@
+﻿.container {
+  width: 95%;
+  height: 3em;
+  margin: 0.5em 0;
+  border: 1px solid #ccc;
+  border-radius: 0.3em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+
+  .textPart {
+    margin: 0 1em;
+    text-align: left;
+
+    .title {
+      font-weight: bold;
+    }
+    .checkTimeText {
+      font-size: 0.7em;
+    }
+  }
+
+}

@@ -1,3 +1,10 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: white;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -26,24 +33,22 @@ a:hover {
 }
 
 body {
-  margin: 0;
-  padding: 0;
   display: flex;
   place-items: center;
   width: 100vw;
   min-height: 100vh;
 }
 
+h1, h2, h3, h4 {
+  line-height: 1.1;
+}
+
 h1 {
   font-size: 3.2em;
-  line-height: 1.1;
-  color: white;
 }
 
 h2 {
   font-size: 2em;
-  line-height: 1.1;
-  color: white;
 }
 
 button {
