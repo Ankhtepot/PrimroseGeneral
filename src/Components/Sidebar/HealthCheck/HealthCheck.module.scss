@@ -9,6 +9,7 @@
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
+  color: white;
 
   .textPart {
     margin: 0 1em;
@@ -22,4 +23,62 @@
     }
   }
 
+  .statusPart {
+    margin-right: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100px;
+
+    .refreshButton {
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+      height: 2em;
+      width: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border-radius: 50%;
+      color: white;
+      transition: background-color 0.3s, color 0.3s;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.5);
+
+        .icon {
+          color: #f4d50d;
+        }
+      }
+
+      &:active, &:focus {
+        background-color: transparent;
+        outline: none;
+      }
+    }
+
+    .icon {
+      width: 1.5em;
+      height: 1.5em;
+      color: inherit;
+    }
+
+    .healthy {
+      color: #4caf50;
+    }
+
+    .unhealthy {
+      color: #f44336;
+    }
+
+    .spinning {
+      animation: spin 2s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
