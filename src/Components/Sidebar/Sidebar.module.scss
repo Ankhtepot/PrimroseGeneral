@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  //border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 0.3em;
   position: relative;
   //background-color: rgba(255, 255, 255, 0.1); // Semi-transparent background
@@ -16,5 +16,25 @@
     border-bottom: 1px solid #ccc;
     width: 100%;
     text-align: center;
+  }
+
+  .loggedInContainer {
+    color: #05ff05;
+    width: 95%;
+    border-radius: 0.3em;
+    background-color: rgba(255, 255, 255, 0.1);
+
+    .loggedInText {
+    }
+
+    .logoutButton {
+      padding: 0;
+      margin: 0.2em 2em;
+
+      .logoutIcon {
+        width: 1.5em;
+        height: 1.5em;
+      }
+    }
   }
 }

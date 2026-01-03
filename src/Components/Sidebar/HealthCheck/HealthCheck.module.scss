@@ -14,6 +14,7 @@
   .textPart {
     margin: 0 1em;
     text-align: left;
+    flex-shrink: 0;
 
     .title {
       font-weight: bold;
@@ -21,6 +22,19 @@
     .checkTimeText {
       font-size: 0.7em;
     }
+  }
+
+  .rateLimitNotice {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    color: #f4d50d;
+    font-size: 0.7rem;
+    animation: pulse 2s infinite;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .statusPart {
@@ -76,6 +90,12 @@
       animation: spin 2s linear infinite;
     }
   }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
 }
 
 @keyframes spin {

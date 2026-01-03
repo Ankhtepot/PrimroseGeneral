@@ -5,73 +5,152 @@ import Config from "../config";
 const initialState: AdministrationState = {
     isHealthCheckInProgress: false,
     isHealthy: false,
+    isRateLimited: false,
+    lastHealthcheckTime: new Date(),
     isLoggingInInProgress: false,
     isLoggedIn: false,
+    loginToken: null,
+    isLastLoginFailed: false
 };
 
-function admnistrationReducer(state: AdministrationState, action: AdministrationAction): AdministrationState {
+function administrationReducer(state: AdministrationState, action: AdministrationAction): AdministrationState {
     switch (action.type) {
         case "CHECK_HEALTH_STATUS":
-            return {...state, isHealthCheckInProgress: true};
+            return {...state,
+                isHealthCheckInProgress: true,
+                lastHealthcheckTime: new Date()};
         case "HEALTH_CHECK_SUCCESS":
-            return {...state, isHealthCheckInProgress: false, isHealthy: true};
+            return {...state,
+                isHealthCheckInProgress: false,
+                isHealthy: true,
+                isRateLimited: false};
         case "HEALTH_CHECK_FAILURE":
-            return {...state, isHealthCheckInProgress: false, isHealthy: false};
+            return {...state,
+                isHealthCheckInProgress: false,
+                isHealthy: false};
+        case "HEALTH_CHECK_RATE_LIMITED":
+            return {...state,
+                isHealthCheckInProgress: false,
+                isRateLimited: true};
+        case "RESET_RATE_LIMIT":
+            return {...state, isRateLimited: false};
         case "LOGIN":
             return {...state, isLoggingInInProgress: true};
         case "LOGIN_SUCCESS":
-            return {...state, isLoggingInInProgress: false, isLoggedIn: true};
+            return {...state,
+                isLoggingInInProgress: false,
+                isLoggedIn: true,
+                loginToken: action.loginToken,
+                isLastLoginFailed: false
+            };
         case "LOGIN_FAILURE":
-            return {...state, isLoggingInInProgress: false, isLoggedIn: false};
+            return {...state,
+                isLoggingInInProgress: false,
+                isLoggedIn: false,
+                isLastLoginFailed: true};
+        case "LOGOUT":
+            return {...state,
+                isLoggedIn: false,
+                loginToken: null};
         default:
             return state;
     }
 }
 
 export default function AdministrationProvider({children}: { children: React.ReactNode }) {
-    const [state, dispatch] = useReducer(admnistrationReducer, initialState);
+    const [state, dispatch] = useReducer(administrationReducer, initialState);
 
     function checkHealthStatus() {
+        if (state.isRateLimited) return;
+
         dispatch({type: "CHECK_HEALTH_STATUS"});
         const url = `${Config.apiUrl}/health`;
-        fetch(url)
-            .then(() => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+            controller.abort();
+        }, 5000);
+
+        fetch(url, {
+            signal: controller.signal,
+            headers: {
+                "X-Health-Token": Config.healthCheckToken
+            }
+        })
+            .then((response) => {
+                if (response.status === 429) {
+                    dispatch({type: "HEALTH_CHECK_RATE_LIMITED"});
+                    setTimeout(() => {
+                        dispatch({type: "RESET_RATE_LIMIT"});
+                    }, 60000); // Reset after 60 seconds
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error(`Health check failed with status: ${response.status}`);
+                }
                 dispatch({type: "HEALTH_CHECK_SUCCESS"});
             })
             .catch((err) => {
-                console.error(err);
+                if (err.name !== 'AbortError') {
+                    console.error("Health check fetch error:", err);
+                }
                 dispatch({type: "HEALTH_CHECK_FAILURE"});
             })
+            .finally(() => {
+                clearTimeout(timeoutId);
+            });
     }
 
     function login(username: string, password: string) {
         dispatch({type: "LOGIN"});
         const url = `${Config.apiUrl}/api/auth/login`;
+        
         fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-Health-Token": Config.healthCheckToken
+                "Accept": "application/json"
             },
             body: JSON.stringify({username, password})
         })
-            .then(() => {
-                const sc = true;
-                dispatch({type: sc ? "LOGIN_SUCCESS" : "LOGIN_FAILURE"})
+            .then(async (response) => {
+                if (response.ok) {
+                    const data = await response.json().catch(() => ({}));
+                    const token = data.token || 
+                                 response.headers.get("X-Auth-Token") || 
+                                 response.headers.get("Authorization")?.replace("Bearer ", "");
+                    
+                    if (!token) {
+                        throw new Error("No token returned from server (checked body and headers).");
+                    }
+                    
+                    dispatch({type: "LOGIN_SUCCESS", loginToken: token});
+                } else {
+                    dispatch({type:"LOGIN_FAILURE"})
+                }
             })
             .catch((err) => {
-                console.error(err);
+                console.error("Login error:", err);
                 dispatch({type: "LOGIN_FAILURE"})
             })
+    }
+
+    function logout() {
+        dispatch({type: "LOGOUT"});
     }
 
     const contextValue = {
         isHealthCheckInProgress: state.isHealthCheckInProgress,
         isHealthy: state.isHealthy,
+        isRateLimited: state.isRateLimited,
+        lastHealthcheckTime: state.lastHealthcheckTime,
         isLoggingInInProgress: state.isLoggingInInProgress,
         isLoggedIn: state.isLoggedIn,
+        loginToken: state.loginToken,
+        isLastLoginFailed: state.isLastLoginFailed,
         checkHealthStatus,
         login,
+        logout,
     };
 
     return (

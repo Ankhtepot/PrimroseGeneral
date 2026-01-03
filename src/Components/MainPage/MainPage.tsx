@@ -2,14 +2,12 @@
 import Sidebar from "../Sidebar/Sidebar.tsx";
 
 function MainPage() {
+
     return (
-        <>
-            <div className={styles.container}>
-                <Sidebar />
-                <div className={styles.content}></div>
-            </div>
-        </>
-    )
+        <div className={styles.container}>
+            <Sidebar />
+        </div>
+    );
 }
 
 export default MainPage;
