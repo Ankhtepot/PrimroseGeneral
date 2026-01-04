@@ -1,6 +1,6 @@
 ﻿import { useState } from 'react';
 import styles from './DatabaseTab.module.scss';
-import { Edit2, Trash2, Plus, Check, X } from 'lucide-react';
+import { Edit2, Trash2, Plus, Check, X, Loader2 } from 'lucide-react';
 
 interface DatabaseTabProps<T extends object> {
     headers?: string[];
@@ -8,6 +8,7 @@ interface DatabaseTabProps<T extends object> {
     editable?: boolean;
     deletable?: boolean;
     creatable?: boolean;
+    isUpdating?: boolean;
     excludeFields?: Array<keyof T>;
     readOnlyFields?: Array<keyof T>;
     maxWidth?: string;
@@ -23,6 +24,7 @@ const DatabaseTab = <T extends object>({
     editable = false,
     deletable = false,
     creatable = false,
+    isUpdating = false,
     excludeFields = [],
     readOnlyFields = [],
     maxWidth,
@@ -76,6 +78,8 @@ const DatabaseTab = <T extends object>({
             keys = headers.map(h => h.toLowerCase().replace(/\s+/g, '_')) as Array<keyof T>;
         } else if (data.length > 0) {
             keys = Object.keys(data[0]) as Array<keyof T>;
+        } else if (isCreating && Object.keys(newValues).length > 0) {
+            keys = Object.keys(newValues) as Array<keyof T>;
         }
         return keys.filter(key => !excludeFields.includes(key));
     };
@@ -93,6 +97,11 @@ const DatabaseTab = <T extends object>({
 
     return (
         <div className={styles.wrapper} style={{ maxWidth }}>
+            {isUpdating && (
+                <div className={styles.overlay}>
+                    <Loader2 className={styles.spinner} size={48} />
+                </div>
+            )}
             <div className={styles.container} style={{ maxHeight }}>
                 <table className={styles.table}>
                     <thead>

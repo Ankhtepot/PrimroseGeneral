@@ -1,0 +1,37 @@
+﻿.button {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 0.6rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    color: white;
+
+    &:hover:not(:disabled) {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-color: white;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    &.loading {
+        .icon {
+            animation: spin 1s linear infinite;
+        }
+    }
+}
+
+.icon {
+    transition: transform 0.2s;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
