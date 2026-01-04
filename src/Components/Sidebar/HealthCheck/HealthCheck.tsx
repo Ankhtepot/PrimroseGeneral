@@ -45,7 +45,8 @@ function HealthCheck() {
                         <XCircle className={`${styles.icon} ${styles.unhealthy}`}/>
                     )
                 )}
-            </div>}
+            </div>
+            }
         </div>
     );
 }

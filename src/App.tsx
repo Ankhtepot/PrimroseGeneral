@@ -1,5 +1,5 @@
 import './styles/App.css'
-import MainPage from "./Components/MainPage/MainPage.tsx";
+import MainPage from "./Components/routes/MainPage/MainPage.tsx";
 
 function App() {
 

@@ -1,5 +1,7 @@
 ﻿@use '../../styles/colors.scss' as colors;
 
+$blur_volume: 10px;
+
 .container {
   width: 20%;
   height: 100%;
@@ -10,9 +12,10 @@
   //border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 0.3em;
   position: relative;
-  //background-color: rgba(255, 255, 255, 0.1); // Semi-transparent background
-  backdrop-filter: blur(5px); // Blurs what is behind the element
-  -webkit-backdrop-filter: blur(5px); // For Safari support
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5); // Semi-transparent background
+  backdrop-filter: blur($blur_volume); // Blurs what is behind the element
+  -webkit-backdrop-filter: blur($blur_volume); // For Safari support
 
   h2 {
     border-bottom: 1px solid #ccc;
@@ -25,6 +28,11 @@
     width: 95%;
     border-radius: 0.3em;
     background-color: rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-bottom: 1em;
 
     .loggedInText {
     }
@@ -44,5 +52,11 @@
         color: colors.$error;
       }
     }
+  }
+
+  .linksContainer {
+    width: 95%;
+    margin-top: 1rem;
+    gap: 0.5rem;
   }
 }

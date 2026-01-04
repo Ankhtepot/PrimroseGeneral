@@ -6,16 +6,21 @@ import {AdministrationContext} from "../../store/contexts.tsx";
 import {LogOutIcon} from "lucide-react";
 import ButtonCommon from "../Common/ButtonCommon/ButtonCommon.tsx";
 import Tooltip from "../Common/Tooltip/Tooltip.tsx";
+import ButtonPageSelect from "../ButtonPageSelect/ButtonPageSelect.tsx";
+import {ADMINISTRATION_PAGE, WEB_VIEW_PAGE} from "../../store/constants.tsx";
+import {useLocation} from "react-router-dom";
 
 function Sidebar() {
-    const {isHealthy,
+    const location = useLocation();
+    const {
+        isHealthy,
         isLoggingInInProgress,
         isLoggedIn,
         checkHealthStatus,
         logout,
         tryLoadStoredToken,
     } = useContext(AdministrationContext);
-    
+
     useEffect(() => {
         checkHealthStatus();
         tryLoadStoredToken();
@@ -29,7 +34,7 @@ function Sidebar() {
             {isHealthy && !isLoggedIn && !isLoggingInInProgress &&
                 <LoginPanel/>}
             {isHealthy && !isLoggingInInProgress && isLoggedIn &&
-                <div className={`${styles.loggedInContainer} flexRowCenter`}>
+                <div className={styles.loggedInContainer}>
                     <div className={styles.loggedInText}>Logged in as admin.</div>
                     <Tooltip text="Logout of current session">
                         <ButtonCommon className={styles.logoutButton} onClick={logout}>
@@ -40,6 +45,17 @@ function Sidebar() {
             }
             {isHealthy && isLoggingInInProgress &&
                 <h3>Logging in...</h3>}
+            {isHealthy && isLoggedIn && (
+                <>
+                    <h2>Pages</h2>
+                    <div className={`flexColCenter ${styles.linksContainer}`}>
+                        <ButtonPageSelect text={"Administration"} linkTo={ADMINISTRATION_PAGE}
+                                          active={location.pathname === ADMINISTRATION_PAGE}/>
+                        <ButtonPageSelect text={"Web View App"} linkTo={WEB_VIEW_PAGE}
+                                          active={location.pathname === WEB_VIEW_PAGE}/>
+                    </div>
+                </>
+            )}
         </div>
     )
 }

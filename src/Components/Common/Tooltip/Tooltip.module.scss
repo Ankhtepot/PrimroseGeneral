@@ -6,8 +6,8 @@
 }
 
 .tooltip {
-    position: absolute;
-    z-index: 1000;
+    position: fixed;
+    z-index: 9999;
     padding: 0.5rem 0.8rem;
     font-size: 1em;
     color: white;
@@ -20,16 +20,16 @@
     pointer-events: none;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     animation: fadeIn 0.2s ease-out;
-    
+
     // Top corner alignment
-    top: 0;
+    // top: 0; // Handled by inline styles
 
     &.right {
-        left: calc(100% + 10px);
+        // left: calc(100% + 10px); // Handled by inline styles
     }
 
     &.left {
-        right: calc(100% + 10px);
+        // right: calc(100% + 10px); // Handled by inline styles
     }
 }
 
