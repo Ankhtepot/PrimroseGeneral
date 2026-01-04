@@ -1,7 +1,7 @@
 ﻿import React, { useState, useContext } from 'react';
 import styles from './LoginPanel.module.scss';
 import { AdministrationContext } from '../../store/contexts';
-import ButtonCommon from '../ButtonCommon/ButtonCommon';
+import ButtonCommon from '../Common/ButtonCommon/ButtonCommon';
 import { Lock, User, Loader2 } from 'lucide-react';
 
 function LoginPanel() {
@@ -28,7 +28,9 @@ function LoginPanel() {
         <div className={styles.container}>
             <div className={styles.loginBox}>
                 {isLastLoginFailed &&
-                    <p className={styles.lastLoginFailed}>Username or password are wrong, please, check.</p>}
+                    <p className={styles.lastLoginFailed}>
+                        Username or password are wrong, please, try again.
+                    </p>}
                 <h2>Login</h2>
                 <p>Enter your credentials to access the application.</p>
                 

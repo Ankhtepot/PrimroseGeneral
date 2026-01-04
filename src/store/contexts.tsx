@@ -26,6 +26,7 @@ export interface AdministrationContextType extends AdministrationState {
     checkHealthStatus: () => void;
     login: (username: string, password: string) => void;
     logout: () => void;
+    tryLoadStoredToken: () => void;
 }
 
 export const AdministrationContext = createContext<AdministrationContextType>({
@@ -40,4 +41,5 @@ export const AdministrationContext = createContext<AdministrationContextType>({
     checkHealthStatus: () => {},
     login: (_username: string, _password: string) => {},
     logout: () => {},
+    tryLoadStoredToken: () => {}
 });

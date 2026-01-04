@@ -2,6 +2,7 @@
 import styles from './HealthCheck.module.scss';
 import { RefreshCw, CheckCircle2, XCircle, AlertTriangle } from 'lucide-react';
 import { AdministrationContext } from '../../../store/contexts';
+import Tooltip from '../../Common/Tooltip/Tooltip';
 
 function HealthCheck() {
     const { isHealthy, isHealthCheckInProgress, isRateLimited, lastHealthcheckTime, checkHealthStatus } = useContext(AdministrationContext);
@@ -28,13 +29,15 @@ function HealthCheck() {
                 </div>
             )}
             {!isRateLimited && <div className={styles.statusPart}>
-                <button
-                    className={styles.refreshButton}
-                    onClick={checkHealthStatus}
-                    disabled={isHealthCheckInProgress || isRateLimited}
-                >
-                    <RefreshCw className={`${styles.icon} ${isHealthCheckInProgress ? styles.spinning : ''}`}/>
-                </button>
+                <Tooltip text="Refresh health status">
+                    <button
+                        className={styles.refreshButton}
+                        onClick={checkHealthStatus}
+                        disabled={isHealthCheckInProgress || isRateLimited}
+                    >
+                        <RefreshCw className={`${styles.icon} ${isHealthCheckInProgress ? styles.spinning : ''}`}/>
+                    </button>
+                </Tooltip>
                 {!isHealthCheckInProgress && (
                     isHealthy ? (
                         <CheckCircle2 className={`${styles.icon} ${styles.healthy}`}/>

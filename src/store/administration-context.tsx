@@ -1,6 +1,7 @@
 ﻿import React, {useReducer} from "react";
 import {type AdministrationState, type AdministrationAction, AdministrationContext} from "./contexts";
 import Config from "../config";
+import {PRIMROSE_TOKEN} from "./constants";
 
 const initialState: AdministrationState = {
     isHealthCheckInProgress: false,
@@ -35,13 +36,16 @@ function administrationReducer(state: AdministrationState, action: Administratio
         case "RESET_RATE_LIMIT":
             return {...state, isRateLimited: false};
         case "LOGIN":
-            return {...state, isLoggingInInProgress: true};
+            return {...state,
+                isLoggingInInProgress: true,
+                isLastLoginFailed: false
+            };
         case "LOGIN_SUCCESS":
+            localStorage.setItem(PRIMROSE_TOKEN, action.loginToken);
             return {...state,
                 isLoggingInInProgress: false,
                 isLoggedIn: true,
                 loginToken: action.loginToken,
-                isLastLoginFailed: false
             };
         case "LOGIN_FAILURE":
             return {...state,
@@ -139,6 +143,13 @@ export default function AdministrationProvider({children}: { children: React.Rea
         dispatch({type: "LOGOUT"});
     }
 
+    function tryLoadStoredToken() {
+        const token = localStorage.getItem(PRIMROSE_TOKEN);
+        if (token) {
+            dispatch({type: "LOGIN_SUCCESS", loginToken: token});
+        }
+    }
+
     const contextValue = {
         isHealthCheckInProgress: state.isHealthCheckInProgress,
         isHealthy: state.isHealthy,
@@ -151,6 +162,7 @@ export default function AdministrationProvider({children}: { children: React.Rea
         checkHealthStatus,
         login,
         logout,
+        tryLoadStoredToken,
     };
 
     return (
