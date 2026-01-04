@@ -40,6 +40,9 @@ $blur_volume: 10px;
     .logoutButton {
       padding: 0;
       margin: 0.2em 0 0.2em 2em;
+      border: 1px solid transparent;
+      background-color: transparent;
+      cursor: pointer;
 
       .logoutIcon {
         width: 1.5em;
@@ -48,8 +51,12 @@ $blur_volume: 10px;
         transition: color 0.3s;
       }
 
-      &:hover .logoutIcon {
-        color: colors.$error;
+      &:hover {
+        border: 1px solid colors.$error;
+
+        .logoutIcon {
+          color: colors.$error;
+        }
       }
     }
   }
