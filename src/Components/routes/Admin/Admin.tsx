@@ -39,7 +39,7 @@ function Admin() {
     };
 
     const handleDelete = (index: number) => {
-        const user = users[index];
+        const user = filteredUsers[index];
         deleteUser(user.id);
     };
 

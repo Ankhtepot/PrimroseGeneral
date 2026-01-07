@@ -13,6 +13,11 @@ interface CrudOptions {
     onError?: (error: string) => void;
 }
 
+async function getErrorFromBody(response: Response) : Promise<string> {
+    const error = await response.text();
+    return error ? `\n${error}` : '';
+}
+
 export const useCrud = <T extends { id: number | string }, C = Omit<T, 'id'>, U = Partial<C>>(options: CrudOptions) => {
     const [data, setData] = useState<T[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +47,8 @@ export const useCrud = <T extends { id: number | string }, C = Omit<T, 'id'>, U 
                 },
             });
             if (!response.ok) {
-                const errMessage = `Failed to fetch data from ${finalFetchPath}`;
+                let errMessage = `Failed to fetch data from ${finalFetchPath}`;
+                errMessage += await getErrorFromBody(response);
                 setError(errMessage);
                 onError?.(errMessage);
                 setIsLoading(false);
@@ -74,7 +80,8 @@ export const useCrud = <T extends { id: number | string }, C = Omit<T, 'id'>, U 
                 body: JSON.stringify(newItem),
             });
             if (!response.ok) {
-                const errMessage = 'Failed to create item';
+                let errMessage = 'Failed to create item';
+                errMessage += await getErrorFromBody(response);
                 setError(errMessage);
                 onError?.(errMessage);
                 setIsUpdating(false);
@@ -106,7 +113,8 @@ export const useCrud = <T extends { id: number | string }, C = Omit<T, 'id'>, U 
                 body: JSON.stringify(updatedItem),
             });
             if (!response.ok) {
-                const errMessage = 'Failed to update item';
+                let errMessage = 'Failed to update item';
+                errMessage += await getErrorFromBody(response);
                 setError(errMessage);
                 onError?.(errMessage);
                 setIsUpdating(false);
@@ -136,7 +144,8 @@ export const useCrud = <T extends { id: number | string }, C = Omit<T, 'id'>, U 
                 },
             });
             if (!response.ok) {
-                const errMessage = 'Failed to delete item';
+                let errMessage = 'Failed to delete item';
+                errMessage += await getErrorFromBody(response);
                 setError(errMessage);
                 onError?.(errMessage);
                 setIsUpdating(false);

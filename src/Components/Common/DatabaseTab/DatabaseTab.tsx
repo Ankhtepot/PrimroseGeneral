@@ -59,13 +59,15 @@ const DatabaseTab = <T extends object, C = T, U = T>({
     columnDefinitions = [],
 }: DatabaseTabProps<T, C, U>) => {
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
-    const [editValues, setEditValues] = useState<Record<string, any>>({});
+    const [editValues, setEditValues] = useState<Record<string, unknown>>({});
     const [isCreating, setIsCreating] = useState(false);
-    const [newValues, setNewValues] = useState<Record<string, any>>({});
+    const [newValues, setNewValues] = useState<Record<string, unknown>>({});
 
     const handleEdit = (index: number) => {
         setEditingIndex(index);
-        setEditValues({ ...data[index] });
+        setEditValues(Object.fromEntries(
+            Object.entries(data[index])
+        ));
     };
 
     const handleSave = (index: number) => {
@@ -226,6 +228,7 @@ const DatabaseTab = <T extends object, C = T, U = T>({
                                                         />
                                                     )
                                                 ) : (
+                                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                                     isShown ? (colDef.cellContent ? colDef.cellContent(row) : String((row as any)[key] ?? '')) : ''
                                                 )}
                                             </td>
@@ -275,8 +278,8 @@ const DatabaseTab = <T extends object, C = T, U = T>({
                                                         onChange={(e) => handleInputChange(key, e.target.value === 'true', true)}
                                                         className={styles.input}
                                                     >
-                                                        <option value="true">true</option>
-                                                        <option value="false">false</option>
+                                                        <option value="true" className={styles.option}>true</option>
+                                                        <option value="false" className={styles.option}>false</option>
                                                     </select>
                                                 ) : colDef.fieldType === ETableFieldType.SELECT && colDef.selectOptions ? (
                                                     <select
