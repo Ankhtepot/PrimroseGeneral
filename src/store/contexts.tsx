@@ -9,6 +9,7 @@ export interface AdministrationState {
     isLoggedIn: boolean;
     loginToken: string | null;
     isLastLoginFailed: boolean;
+    loginName?: string;
 }
 
 export type AdministrationAction =
@@ -18,7 +19,7 @@ export type AdministrationAction =
     | { type: "HEALTH_CHECK_RATE_LIMITED" }
     | { type: "RESET_RATE_LIMIT" }
     | { type: "LOGIN"; username?: string; password?: string }
-    | { type: "LOGIN_SUCCESS"; loginToken: string }
+    | { type: "LOGIN_SUCCESS"; loginToken: string, loginName?: string }
     | { type: "LOGIN_FAILURE" }
     | { type: "LOGOUT" };
 

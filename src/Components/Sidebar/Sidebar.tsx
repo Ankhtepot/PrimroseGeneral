@@ -1,6 +1,6 @@
 ﻿import styles from './Sidebar.module.scss';
 import HealthCheck from "./HealthCheck/HealthCheck.tsx";
-import LoginPanel from "../LoginPanel/LoginPanel.tsx";
+// import LoginPanel from "../LoginPanel/LoginPanel.tsx";
 import {useContext, useEffect} from "react";
 import {AdministrationContext} from "../../store/contexts.tsx";
 import {LogOutIcon} from "lucide-react";
@@ -16,6 +16,7 @@ function Sidebar() {
         isHealthy,
         isLoggingInInProgress,
         isLoggedIn,
+        loginName,
         checkHealthStatus,
         logout,
         tryLoadStoredToken,
@@ -31,11 +32,11 @@ function Sidebar() {
         <div className={styles.container}>
             <h2>Navigation</h2>
             <HealthCheck/>
-            {isHealthy && !isLoggedIn && !isLoggingInInProgress &&
-                <LoginPanel/>}
+            {/*{isHealthy && !isLoggedIn && !isLoggingInInProgress &&*/}
+            {/*    <LoginPanel/>}*/}
             {isHealthy && !isLoggingInInProgress && isLoggedIn &&
                 <div className={styles.loggedInContainer}>
-                    <div className={styles.loggedInText}>Logged in as admin.</div>
+                    <div className={styles.loggedInText}>Logged in as {loginName}.</div>
                     <Tooltip text="Logout of current session">
                         <ButtonCommon className={styles.logoutButton} onClick={logout}>
                             <LogOutIcon className={styles.logoutIcon}/>
@@ -49,10 +50,11 @@ function Sidebar() {
                 <>
                     <h2>Pages</h2>
                     <div className={`flexColCenter ${styles.linksContainer}`}>
-                        {pageRoutes.map((route) => (
+                        {pageRoutes.map((route) =>
+                            ( route.showInSidebar !== false &&
                             <ButtonPageSelect
                                 key={route.path}
-                                text={route.displayText}
+                                text={route.displayText || 'Add name!'}
                                 linkTo={route.path}
                                 active={location.pathname === route.path}
                             />

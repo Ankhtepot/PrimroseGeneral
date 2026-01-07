@@ -11,7 +11,8 @@ const initialState: AdministrationState = {
     isLoggingInInProgress: false,
     isLoggedIn: false,
     loginToken: null,
-    isLastLoginFailed: false
+    isLastLoginFailed: false,
+    loginName: 'anonymous',
 };
 
 function administrationReducer(state: AdministrationState, action: AdministrationAction): AdministrationState {
@@ -46,6 +47,7 @@ function administrationReducer(state: AdministrationState, action: Administratio
                 isLoggingInInProgress: false,
                 isLoggedIn: true,
                 loginToken: action.loginToken,
+                loginName: action.loginName,
             };
         case "LOGIN_FAILURE":
             return {...state,
@@ -128,7 +130,7 @@ export default function AdministrationProvider({children}: { children: React.Rea
                         throw new Error("No token returned from server (checked body and headers).");
                     }
                     
-                    dispatch({type: "LOGIN_SUCCESS", loginToken: token});
+                    dispatch({type: "LOGIN_SUCCESS", loginToken: token, loginName: username});
                 } else {
                     dispatch({type:"LOGIN_FAILURE"})
                 }
@@ -159,6 +161,7 @@ export default function AdministrationProvider({children}: { children: React.Rea
         isLoggedIn: state.isLoggedIn,
         loginToken: state.loginToken,
         isLastLoginFailed: state.isLastLoginFailed,
+        loginName: state.loginName,
         checkHealthStatus,
         login,
         logout,

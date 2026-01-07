@@ -1,0 +1,45 @@
+﻿.entryPageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid #ccc;
+  border-radius: 1em;
+
+  h1 {
+    font-size: 5em;
+    padding: 0;
+    margin-bottom: .5em;
+  }
+
+  p {
+    font-size: 1.5em;
+    color: white;
+  }
+
+  .choseAdministrationAreaBlock {
+    margin-top: 2em;
+    font-size: 2em;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+
+    .icon {
+      padding-top: 0.2em;
+      width: 2em;
+      height: 2em;
+      color: white;
+      fill: currentColor;
+      animation: pointRight 1s linear infinite;
+    }
+
+    @keyframes pointRight {
+      0% { transform: translateX(0); }
+      95% { transform: translateX(-1em); }
+      100% { transform: translateX(0); }
+    }
+  }
+}
