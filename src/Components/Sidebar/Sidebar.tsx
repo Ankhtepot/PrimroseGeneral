@@ -7,8 +7,8 @@ import {LogOutIcon} from "lucide-react";
 import ButtonCommon from "../Common/ButtonCommon/ButtonCommon.tsx";
 import Tooltip from "../Common/Tooltip/Tooltip.tsx";
 import ButtonPageSelect from "../ButtonPageSelect/ButtonPageSelect.tsx";
-import {ADMINISTRATION_PAGE, WEB_VIEW_PAGE} from "../../store/constants.tsx";
 import {useLocation} from "react-router-dom";
+import {pageRoutes} from "../../routing.tsx";
 
 function Sidebar() {
     const location = useLocation();
@@ -49,10 +49,14 @@ function Sidebar() {
                 <>
                     <h2>Pages</h2>
                     <div className={`flexColCenter ${styles.linksContainer}`}>
-                        <ButtonPageSelect text={"Administration"} linkTo={ADMINISTRATION_PAGE}
-                                          active={location.pathname === ADMINISTRATION_PAGE}/>
-                        <ButtonPageSelect text={"Web View App"} linkTo={WEB_VIEW_PAGE}
-                                          active={location.pathname === WEB_VIEW_PAGE}/>
+                        {pageRoutes.map((route) => (
+                            <ButtonPageSelect
+                                key={route.path}
+                                text={route.displayText}
+                                linkTo={route.path}
+                                active={location.pathname === route.path}
+                            />
+                        ))}
                     </div>
                 </>
             )}
