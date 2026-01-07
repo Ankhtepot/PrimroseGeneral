@@ -4,19 +4,22 @@ import {useNavigate} from "react-router-dom";
 
 type ProtectedRouteProps = {
     children: ReactNode;
+    requiredRoles?: string[];
 }
 
-const ProtectedRoute = ({children}: ProtectedRouteProps) => {
-    const {isLoggedIn, isHealthy} = useContext(AdministrationContext);
+const ProtectedRoute = ({children, requiredRoles}: ProtectedRouteProps) => {
+    const {isLoggedIn, isHealthy, allowedRoles, isSystemAdmin} = useContext(AdministrationContext);
     const navigate = useNavigate();
 
+    const hasAccess = isSystemAdmin || !requiredRoles || requiredRoles.some(role => allowedRoles.includes(role));
+
     useEffect(() => {
-        if (!isHealthy || !isLoggedIn) {
+        if (!isHealthy || !isLoggedIn || !hasAccess) {
             navigate("/");
         }
-    }, [isHealthy, isLoggedIn, navigate]);
+    }, [isHealthy, isLoggedIn, hasAccess, navigate]);
 
-    if (!isHealthy || !isLoggedIn) {
+    if (!isHealthy || !isLoggedIn || !hasAccess) {
         return null;
     }
 

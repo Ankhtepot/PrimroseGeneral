@@ -1,7 +1,8 @@
 ﻿import React, {useReducer} from "react";
-import {type AdministrationState, type AdministrationAction, AdministrationContext} from "./contexts";
+import {type AdministrationState, type AdministrationAction, AdministrationContext, type AdministrationContextType} from "./contexts";
 import Config from "../config";
 import {PRIMROSE_TOKEN} from "./constants";
+import {decodeToken, getIsAdminFromToken, getRolesFromToken} from "../utils/auth";
 
 const initialState: AdministrationState = {
     isHealthCheckInProgress: false,
@@ -13,6 +14,8 @@ const initialState: AdministrationState = {
     loginToken: null,
     isLastLoginFailed: false,
     loginName: 'anonymous',
+    allowedRoles: [],
+    isSystemAdmin: false,
 };
 
 function administrationReducer(state: AdministrationState, action: AdministrationAction): AdministrationState {
@@ -48,16 +51,25 @@ function administrationReducer(state: AdministrationState, action: Administratio
                 isLoggedIn: true,
                 loginToken: action.loginToken,
                 loginName: action.loginName,
+                allowedRoles: action.allowedRoles,
+                isSystemAdmin: action.isSystemAdmin,
             };
         case "LOGIN_FAILURE":
             return {...state,
                 isLoggingInInProgress: false,
                 isLoggedIn: false,
-                isLastLoginFailed: true};
+                isLastLoginFailed: true,
+                allowedRoles: [],
+                isSystemAdmin: false,
+            };
         case "LOGOUT":
+            localStorage.removeItem(PRIMROSE_TOKEN);
             return {...state,
                 isLoggedIn: false,
-                loginToken: null};
+                loginToken: null,
+                allowedRoles: [],
+                isSystemAdmin: false,
+            };
         default:
             return state;
     }
@@ -130,7 +142,9 @@ export default function AdministrationProvider({children}: { children: React.Rea
                         throw new Error("No token returned from server (checked body and headers).");
                     }
                     
-                    dispatch({type: "LOGIN_SUCCESS", loginToken: token, loginName: username});
+                    const roles = getRolesFromToken(token);
+                    const isAdmin = getIsAdminFromToken(token);
+                    dispatch({type: "LOGIN_SUCCESS", loginToken: token, loginName: username, allowedRoles: roles, isSystemAdmin: isAdmin});
                 } else {
                     dispatch({type:"LOGIN_FAILURE"})
                 }
@@ -148,11 +162,21 @@ export default function AdministrationProvider({children}: { children: React.Rea
     function tryLoadStoredToken() {
         const token = localStorage.getItem(PRIMROSE_TOKEN);
         if (token) {
-            dispatch({type: "LOGIN_SUCCESS", loginToken: token});
+            const roles = getRolesFromToken(token);
+            const isAdmin = getIsAdminFromToken(token);
+            // Try to extract name from token
+            const decoded = decodeToken(token);
+            const name = decoded?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || 
+                         decoded?.name || 
+                         decoded?.sub || 
+                         decoded?.username || 
+                         'Restored Session';
+            
+            dispatch({type: "LOGIN_SUCCESS", loginToken: token, loginName: name, allowedRoles: roles, isSystemAdmin: isAdmin});
         }
     }
 
-    const contextValue = {
+    const contextValue: AdministrationContextType = {
         isHealthCheckInProgress: state.isHealthCheckInProgress,
         isHealthy: state.isHealthy,
         isRateLimited: state.isRateLimited,
@@ -162,6 +186,8 @@ export default function AdministrationProvider({children}: { children: React.Rea
         loginToken: state.loginToken,
         isLastLoginFailed: state.isLastLoginFailed,
         loginName: state.loginName,
+        allowedRoles: state.allowedRoles,
+        isSystemAdmin: state.isSystemAdmin,
         checkHealthStatus,
         login,
         logout,

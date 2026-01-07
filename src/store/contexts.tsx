@@ -9,7 +9,9 @@ export interface AdministrationState {
     isLoggedIn: boolean;
     loginToken: string | null;
     isLastLoginFailed: boolean;
-    loginName?: string;
+    loginName: string;
+    allowedRoles: string[];
+    isSystemAdmin: boolean;
 }
 
 export type AdministrationAction =
@@ -19,7 +21,7 @@ export type AdministrationAction =
     | { type: "HEALTH_CHECK_RATE_LIMITED" }
     | { type: "RESET_RATE_LIMIT" }
     | { type: "LOGIN"; username?: string; password?: string }
-    | { type: "LOGIN_SUCCESS"; loginToken: string, loginName?: string }
+    | { type: "LOGIN_SUCCESS"; loginToken: string, loginName: string, allowedRoles: string[], isSystemAdmin: boolean }
     | { type: "LOGIN_FAILURE" }
     | { type: "LOGOUT" };
 
@@ -39,6 +41,9 @@ export const AdministrationContext = createContext<AdministrationContextType>({
     lastHealthcheckTime: new Date(),
     loginToken: null,
     isLastLoginFailed: false,
+    loginName: "",
+    allowedRoles: [],
+    isSystemAdmin: false,
     checkHealthStatus: () => {},
     login: (_username: string, _password: string) => {},
     logout: () => {},
