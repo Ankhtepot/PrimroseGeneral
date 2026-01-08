@@ -4,22 +4,15 @@ import {useWebViewApp, type PageData} from "./useWebViewApp.ts";
 import ButtonRefresh from "../../Common/ButtonRefresh/ButtonRefresh.tsx";
 
 function WebViewApp() {
-    const {pages, isLoading, isUpdating, error, fetchPages, createPage, updatePage, deletePage} = useWebViewApp();
-
-    const handleUpdate = (_index: number, updatedItem: PageData) => {
-        updatePage(updatedItem.id, updatedItem);
-    };
-
-    const handleCreate = (newItem: PageData) => {
-        createPage(newItem);
-    };
-
-    const handleDelete = (index: number) => {
-        const pageToDelete = pages[index];
-        if (pageToDelete) {
-            deletePage(pageToDelete.id);
-        }
-    };
+    const {pages,
+        isLoading,
+        isUpdating,
+        error,
+        fetchPages,
+        handleCreate,
+        handleUpdate,
+        handleDelete
+    } = useWebViewApp();
 
     return (
         <div className={styles.container}>

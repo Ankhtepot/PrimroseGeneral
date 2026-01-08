@@ -21,14 +21,29 @@ export const useWebViewApp = () => {
         fetchPath: '/api/pages/admin'
     });
 
+    const handleUpdate = (_index: number, updatedItem: PageData) => {
+        updatePage(updatedItem.id, updatedItem);
+    };
+
+    const handleCreate = (newItem: PageData) => {
+        createPage(newItem);
+    };
+
+    const handleDelete = (index: number) => {
+        const pageToDelete = pages[index];
+        if (pageToDelete) {
+            deletePage(pageToDelete.id);
+        }
+    };
+
     return {
         pages,
         isLoading,
         isUpdating,
         error,
         fetchPages,
-        createPage,
-        updatePage,
-        deletePage
+        handleCreate,
+        handleUpdate,
+        handleDelete
     };
 };
