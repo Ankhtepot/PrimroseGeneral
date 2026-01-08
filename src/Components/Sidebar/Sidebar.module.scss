@@ -17,10 +17,29 @@ $blur_volume: 10px;
   backdrop-filter: blur($blur_volume); // Blurs what is behind the element
   -webkit-backdrop-filter: blur($blur_volume); // For Safari support
 
-  h2 {
-    border-bottom: 1px solid #ccc;
-    width: 100%;
-    text-align: center;
+  .titleWrapper {
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    margin: 1em 0;
+    padding: .5em;
+    border-radius: 0.3em;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur($blur_volume);
+
+    h2 {
+      text-align: center;
+    }
+
+    .logo {
+      width: 3em;
+      padding: 0.2em;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
   }
 
   .loggedInContainer {
@@ -31,7 +50,7 @@ $blur_volume: 10px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
     margin-bottom: 1em;
 
     .loggedInText {
@@ -39,7 +58,7 @@ $blur_volume: 10px;
 
     .logoutButton {
       padding: 0;
-      margin: 0.2em 0 0.2em 2em;
+      margin: 0.2em 0 0.2em 1em;
       border: 1px solid transparent;
       background-color: transparent;
       cursor: pointer;

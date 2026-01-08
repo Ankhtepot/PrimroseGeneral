@@ -32,10 +32,11 @@ function Sidebar() {
 
     return (
         <div className={styles.container}>
-            <h2>Navigation</h2>
+            <div className={styles.titleWrapper}>
+                <h2>Primrose</h2>
+                <img src={'logo.svg'} alt="Primrose Logo" className={styles.logo}/>
+            </div>
             <HealthCheck/>
-            {/*{isHealthy && !isLoggedIn && !isLoggingInInProgress &&*/}
-            {/*    <LoginPanel/>}*/}
             {isHealthy && !isLoggingInInProgress && isLoggedIn &&
                 <div className={styles.loggedInContainer}>
                     <div className={styles.loggedInText}>Logged in as {loginName}.</div>

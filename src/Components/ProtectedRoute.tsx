@@ -8,10 +8,10 @@ type ProtectedRouteProps = {
 }
 
 const ProtectedRoute = ({children, requiredRoles}: ProtectedRouteProps) => {
-    const {isLoggedIn, isHealthy, allowedRoles, loggedInUserHasAdminRights} = useContext(AdministrationContext);
+    const {isLoggedIn, isHealthy, allowedRoles} = useContext(AdministrationContext);
     const navigate = useNavigate();
 
-    const hasAccess = loggedInUserHasAdminRights || !requiredRoles || requiredRoles.some(role => allowedRoles.includes(role));
+    const hasAccess = !requiredRoles || requiredRoles.some(role => allowedRoles.includes(role));
 
     useEffect(() => {
         if (!isHealthy || !isLoggedIn || !hasAccess) {
