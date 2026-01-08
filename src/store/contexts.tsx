@@ -11,7 +11,7 @@ export interface AdministrationState {
     isLastLoginFailed: boolean;
     loginName: string;
     allowedRoles: string[];
-    isSystemAdmin: boolean;
+    loggedInUserHasAdminRights: boolean;
 }
 
 export type AdministrationAction =
@@ -43,7 +43,7 @@ export const AdministrationContext = createContext<AdministrationContextType>({
     isLastLoginFailed: false,
     loginName: "",
     allowedRoles: [],
-    isSystemAdmin: false,
+    loggedInUserHasAdminRights: false,
     checkHealthStatus: () => {},
     login: (_username: string, _password: string) => {},
     logout: () => {},

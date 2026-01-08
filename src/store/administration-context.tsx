@@ -15,7 +15,7 @@ const initialState: AdministrationState = {
     isLastLoginFailed: false,
     loginName: 'anonymous',
     allowedRoles: [],
-    isSystemAdmin: false,
+    loggedInUserHasAdminRights: false,
 };
 
 function administrationReducer(state: AdministrationState, action: AdministrationAction): AdministrationState {
@@ -36,7 +36,9 @@ function administrationReducer(state: AdministrationState, action: Administratio
         case "HEALTH_CHECK_RATE_LIMITED":
             return {...state,
                 isHealthCheckInProgress: false,
-                isRateLimited: true};
+                isRateLimited: true,
+                isHealthy: false,
+            };
         case "RESET_RATE_LIMIT":
             return {...state, isRateLimited: false};
         case "LOGIN":
@@ -52,7 +54,7 @@ function administrationReducer(state: AdministrationState, action: Administratio
                 loginToken: action.loginToken,
                 loginName: action.loginName,
                 allowedRoles: action.allowedRoles,
-                isSystemAdmin: action.isSystemAdmin,
+                loggedInUserHasAdminRights: action.isSystemAdmin,
             };
         case "LOGIN_FAILURE":
             return {...state,
@@ -60,7 +62,7 @@ function administrationReducer(state: AdministrationState, action: Administratio
                 isLoggedIn: false,
                 isLastLoginFailed: true,
                 allowedRoles: [],
-                isSystemAdmin: false,
+                loggedInUserHasAdminRights: false,
             };
         case "LOGOUT":
             localStorage.removeItem(PRIMROSE_TOKEN);
@@ -68,7 +70,7 @@ function administrationReducer(state: AdministrationState, action: Administratio
                 isLoggedIn: false,
                 loginToken: null,
                 allowedRoles: [],
-                isSystemAdmin: false,
+                loggedInUserHasAdminRights: false,
             };
         default:
             return state;
@@ -187,7 +189,7 @@ export default function AdministrationProvider({children}: { children: React.Rea
         isLastLoginFailed: state.isLastLoginFailed,
         loginName: state.loginName,
         allowedRoles: state.allowedRoles,
-        isSystemAdmin: state.isSystemAdmin,
+        loggedInUserHasAdminRights: state.loggedInUserHasAdminRights,
         checkHealthStatus,
         login,
         logout,

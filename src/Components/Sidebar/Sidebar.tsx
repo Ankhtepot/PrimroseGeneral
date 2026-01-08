@@ -18,7 +18,7 @@ function Sidebar() {
         isLoggedIn,
         loginName,
         allowedRoles,
-        isSystemAdmin,
+        loggedInUserHasAdminRights : isAdmin,
         checkHealthStatus,
         logout,
         tryLoadStoredToken,
@@ -53,7 +53,7 @@ function Sidebar() {
                     <h2>Pages</h2>
                     <div className={`flexColCenter ${styles.linksContainer}`}>
                         {pageRoutes.map((route) => {
-                            const hasAccess = isSystemAdmin || !route.requiredRoles || route.requiredRoles.some(role => allowedRoles.includes(role));
+                            const hasAccess = isAdmin || !route.requiredRoles || route.requiredRoles.some(role => allowedRoles.includes(role));
                             return (route.showInSidebar !== false && hasAccess &&
                                 <ButtonPageSelect
                                     key={route.path}

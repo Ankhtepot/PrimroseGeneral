@@ -11,6 +11,7 @@ export interface ColumnDefinition<T> {
     cellContent?: (row: T) => JSX.Element;
     fieldType?: ETableFieldType;
     selectOptions?: string[];
+    displayName?: string;
 }
 
 const DEFAULT_COLUMN_DEFINITION = {
@@ -126,11 +127,14 @@ const DatabaseTab = <T extends object, C = T, U = T>({
     const getDisplayName = (key: string) => {
         const colDef = columnDefinitions.find(cd => String(cd.key) === key);
         if (colDef?.headerContent) return colDef.headerContent;
-
+        // Headers array has priority over column definitions for display names
         if (headers && headers.length > 0) {
             const index = headers.map(h => h.toLowerCase().replace(/\s+/g, '_')).indexOf(key);
             if (index !== -1) return headers[index];
         }
+
+        if (colDef?.displayName) return colDef.displayName;
+
         const s = String(key);
         return s.charAt(0).toUpperCase() + s.slice(1).replace(/_/g, ' ');
     };
