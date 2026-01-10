@@ -10,8 +10,6 @@ import ButtonPageSelect from "../ButtonPageSelect/ButtonPageSelect.tsx";
 import {useLocation} from "react-router-dom";
 import {pageRoutes} from "../../routing.tsx";
 
-import logo from '@public/logo.svg';
-
 function Sidebar() {
     const location = useLocation();
     const {
@@ -36,7 +34,7 @@ function Sidebar() {
         <div className={styles.container}>
             <div className={styles.titleWrapper}>
                 <h2>Primrose</h2>
-                <img src={logo} alt="Primrose Logo" className={styles.logo}/>
+                <img src={'logo.svg'} alt="Primrose Logo" className={styles.logo}/>
             </div>
             <HealthCheck/>
             {isHealthy && !isLoggingInInProgress && isLoggedIn &&
