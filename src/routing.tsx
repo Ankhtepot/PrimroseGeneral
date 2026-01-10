@@ -25,4 +25,6 @@ export const router = createBrowserRouter([
     {
         path: "/", element: <App/>, children: pageRoutes
     }
-]);
+], {
+    basename: import.meta.env.BASE_URL
+});

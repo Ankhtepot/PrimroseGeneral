@@ -34,7 +34,7 @@ function Sidebar() {
         <div className={styles.container}>
             <div className={styles.titleWrapper}>
                 <h2>Primrose</h2>
-                <img src={'logo.svg'} alt="Primrose Logo" className={styles.logo}/>
+                <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="Primrose Logo" className={styles.logo}/>
             </div>
             <HealthCheck/>
             {isHealthy && !isLoggingInInProgress && isLoggedIn &&

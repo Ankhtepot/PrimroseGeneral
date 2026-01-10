@@ -1,6 +1,7 @@
 ﻿import {type ReactNode, useContext, useEffect} from "react";
 import {AdministrationContext} from "../store/contexts.tsx";
 import {useNavigate} from "react-router-dom";
+import {ROLE_ADMIN} from "../store/constants.tsx";
 
 type ProtectedRouteProps = {
     children: ReactNode;
@@ -8,10 +9,10 @@ type ProtectedRouteProps = {
 }
 
 const ProtectedRoute = ({children, requiredRoles}: ProtectedRouteProps) => {
-    const {isLoggedIn, isHealthy, allowedRoles} = useContext(AdministrationContext);
+    const {isLoggedIn, isHealthy, allowedRoles, } = useContext(AdministrationContext);
     const navigate = useNavigate();
 
-    const hasAccess = !requiredRoles || requiredRoles.some(role => allowedRoles.includes(role));
+    const hasAccess = allowedRoles.includes(ROLE_ADMIN) || !requiredRoles || requiredRoles.some(role => allowedRoles.includes(role));
 
     useEffect(() => {
         if (!isHealthy || !isLoggedIn || !hasAccess) {
