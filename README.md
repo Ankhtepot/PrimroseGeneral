@@ -19,6 +19,11 @@ npm install
 npm run dev
 ```
 
+To deploy on GitHub-Pages
+```bash
+npm run deploy
+```
+
 ## Debugging
 
 The project includes pre-configured debug settings in the `.run` directory for IDEs that support them (like JetBrains IDEs).
