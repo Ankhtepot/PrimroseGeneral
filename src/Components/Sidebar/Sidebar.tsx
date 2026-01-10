@@ -10,7 +10,7 @@ import ButtonPageSelect from "../ButtonPageSelect/ButtonPageSelect.tsx";
 import {useLocation} from "react-router-dom";
 import {pageRoutes} from "../../routing.tsx";
 
-import logo from '../../../public/logo.svg';
+import logo from '@public/logo.svg';
 
 function Sidebar() {
     const location = useLocation();
