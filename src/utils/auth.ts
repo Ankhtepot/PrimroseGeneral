@@ -15,6 +15,14 @@
     }
 };
 
+export const isTokenExpired = (token: string): boolean => {
+    const decoded = decodeToken(token);
+    if (!decoded || !decoded.exp) return false;
+    
+    const now = Math.floor(Date.now() / 1000);
+    return decoded.exp < now;
+};
+
 export const getRolesFromToken = (token: string): string[] => {
     const decoded = decodeToken(token);
     if (!decoded) return [];

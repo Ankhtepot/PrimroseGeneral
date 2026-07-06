@@ -16,16 +16,14 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        // target: 'https://77.42.74.201:8080', // HTTP
-        target: 'https://77.42.74.201:443',
+        target: 'https://api.primrose.work',
         changeOrigin: true,
-        secure: false,
+        secure: true,
       },
       '/health': {
-        // target: 'https://77.42.74.201:8080', //HTTP
-        target: 'https://77.42.74.201:443',
+        target: 'https://api.primrose.work',
         changeOrigin: true,
-        secure: false,
+        secure: true,
       }
     }
   }

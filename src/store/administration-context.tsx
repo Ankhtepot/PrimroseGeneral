@@ -2,7 +2,7 @@
 import {type AdministrationState, type AdministrationAction, AdministrationContext, type AdministrationContextType} from "./contexts";
 import Config from "../config";
 import {PRIMROSE_TOKEN} from "./constants";
-import {decodeToken, getIsAdminFromToken, getRolesFromToken} from "../utils/auth";
+import {decodeToken, getIsAdminFromToken, getRolesFromToken, isTokenExpired} from "../utils/auth";
 
 const initialState: AdministrationState = {
     isHealthCheckInProgress: false,
@@ -164,9 +164,13 @@ export default function AdministrationProvider({children}: { children: React.Rea
     function tryLoadStoredToken() {
         const token = localStorage.getItem(PRIMROSE_TOKEN);
         if (token) {
+            if (isTokenExpired(token)) {
+                localStorage.removeItem(PRIMROSE_TOKEN);
+                return;
+            }
             const roles = getRolesFromToken(token);
             const isAdmin = getIsAdminFromToken(token);
-            // Try to extract name from token
+            // Try to extract the name from the token
             const decoded = decodeToken(token);
             const name = decoded?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || 
                          decoded?.name || 

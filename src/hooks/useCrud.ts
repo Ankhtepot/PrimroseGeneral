@@ -23,7 +23,7 @@ export const useCrud = <T extends { id: number | string }, C = Omit<T, 'id'>, U 
     const [isLoading, setIsLoading] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const { loginToken } = useContext(AdministrationContext);
+    const { loginToken, logout } = useContext(AdministrationContext);
 
     const { 
         basePath, 
@@ -46,6 +46,10 @@ export const useCrud = <T extends { id: number | string }, C = Omit<T, 'id'>, U 
                     'Authorization': `Bearer ${loginToken}`,
                 },
             });
+            if (response.status === 401) {
+                logout?.();
+                return;
+            }
             if (!response.ok) {
                 let errMessage = `Failed to fetch data from ${finalFetchPath}`;
                 errMessage += await getErrorFromBody(response);
@@ -63,7 +67,7 @@ export const useCrud = <T extends { id: number | string }, C = Omit<T, 'id'>, U 
         } finally {
             setIsLoading(false);
         }
-    }, [loginToken, basePath, fetchPath, onError]);
+    }, [loginToken, basePath, fetchPath, onError, logout]);
 
     const createItem = async (newItem: C) => {
         if (!loginToken) return;
@@ -79,6 +83,10 @@ export const useCrud = <T extends { id: number | string }, C = Omit<T, 'id'>, U 
                 },
                 body: JSON.stringify(newItem),
             });
+            if (response.status === 401) {
+                logout?.();
+                return;
+            }
             if (!response.ok) {
                 let errMessage = 'Failed to create item';
                 errMessage += await getErrorFromBody(response);
@@ -112,6 +120,10 @@ export const useCrud = <T extends { id: number | string }, C = Omit<T, 'id'>, U 
                 },
                 body: JSON.stringify(updatedItem),
             });
+            if (response.status === 401) {
+                logout?.();
+                return;
+            }
             if (!response.ok) {
                 let errMessage = 'Failed to update item';
                 errMessage += await getErrorFromBody(response);
@@ -143,6 +155,10 @@ export const useCrud = <T extends { id: number | string }, C = Omit<T, 'id'>, U 
                     'Authorization': `Bearer ${loginToken}`,
                 },
             });
+            if (response.status === 401) {
+                logout?.();
+                return;
+            }
             if (!response.ok) {
                 let errMessage = 'Failed to delete item';
                 errMessage += await getErrorFromBody(response);
